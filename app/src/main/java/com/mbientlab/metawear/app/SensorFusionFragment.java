@@ -44,6 +44,8 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+
 import com.mbientlab.metawear.UnsupportedModuleException;
 import com.mbientlab.metawear.app.help.HelpOption;
 import com.mbientlab.metawear.app.help.HelpOptionAdapter;
@@ -120,7 +122,10 @@ public class SensorFusionFragment extends SensorFragment {
                 LineData chartData = chart.getData();
 
                 final Quaternion quaternion = data.value(Quaternion.class);
-                chartData.addXValue(String.format(Locale.US, "%.2f", sampleCount * SAMPLING_PERIOD));
+                chartData.addEntry(new Entry(sampleCount * SAMPLING_PERIOD, sampleCount), 0);
+                chartData.addEntry(new Entry(sampleCount * SAMPLING_PERIOD, sampleCount), 1);
+                chartData.addEntry(new Entry(sampleCount * SAMPLING_PERIOD, sampleCount), 2);
+                chartData.addEntry(new Entry(sampleCount * SAMPLING_PERIOD, sampleCount), 3);
                 chartData.addEntry(new Entry(quaternion.w(), sampleCount), 0);
                 chartData.addEntry(new Entry(quaternion.x(), sampleCount), 1);
                 chartData.addEntry(new Entry(quaternion.y(), sampleCount), 2);
@@ -141,7 +146,10 @@ public class SensorFusionFragment extends SensorFragment {
                 LineData chartData = chart.getData();
 
                 final EulerAngles angles = data.value(EulerAngles.class);
-                chartData.addXValue(String.format(Locale.US, "%.2f", sampleCount * SAMPLING_PERIOD));
+                chartData.addEntry(new Entry(sampleCount * SAMPLING_PERIOD, sampleCount), 0);
+                chartData.addEntry(new Entry(sampleCount * SAMPLING_PERIOD, sampleCount), 1);
+                chartData.addEntry(new Entry(sampleCount * SAMPLING_PERIOD, sampleCount), 2);
+                chartData.addEntry(new Entry(sampleCount * SAMPLING_PERIOD, sampleCount), 3);
                 chartData.addEntry(new Entry(angles.heading(), sampleCount), 0);
                 chartData.addEntry(new Entry(angles.pitch(), sampleCount), 1);
                 chartData.addEntry(new Entry(angles.roll(), sampleCount), 2);
@@ -175,12 +183,12 @@ public class SensorFusionFragment extends SensorFragment {
             fos.write(CSV_HEADER.getBytes());
 
             LineData data = chart.getLineData();
-            LineDataSet x0DataSet = data.getDataSetByIndex(0), x1DataSet = data.getDataSetByIndex(1),
+            ILineDataSet x0DataSet = data.getDataSetByIndex(0), x1DataSet = data.getDataSetByIndex(1),
                     x2DataSet = data.getDataSetByIndex(2), x3DataSet = data.getDataSetByIndex(3);
-            for (int i = 0; i < data.getXValCount(); i++) {
+            for (int i = 0; i < data.getEntryCount(); i++) {
                 fos.write(String.format(Locale.US, "%.3f,%.3f,%.3f,%.3f,%.3f%n", (i * SAMPLING_PERIOD),
-                        x0DataSet.getEntryForXIndex(i).getVal(), x1DataSet.getEntryForXIndex(i).getVal(),
-                        x2DataSet.getEntryForXIndex(i).getVal(), x3DataSet.getEntryForXIndex(i).getVal()).getBytes());
+                        x0DataSet.getEntryForIndex(i).getX(), x1DataSet.getEntryForIndex(i).getX(),
+                        x2DataSet.getEntryForIndex(i).getX(), x3DataSet.getEntryForIndex(i).getX()).getBytes());
             }
             fos.close();
             return filename;

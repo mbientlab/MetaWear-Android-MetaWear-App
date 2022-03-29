@@ -32,13 +32,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion '29.0.2'
+    compileSdkVersion 32
+    buildToolsVersion '30.0.3'
 
     defaultConfig {
         applicationId "com.mbientlab.metawear.app"
-        minSdkVersion 24
-        targetSdkVersion 29
+        minSdkVersion 30
+        targetSdkVersion 32
         versionCode 23
         versionName "3.5.27"
 
@@ -62,8 +62,8 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.mbientlab:metawear:3.8.2'
     implementation 'com.mbientlab.bletoolbox:scanner:0.3.1'
-    implementation 'com.github.PhilJay:MPAndroidChart:v2.1.6'
-    implementation 'no.nordicsemi.android:dfu:1.11.1'
-    implementation 'androidx.appcompat:appcompat:1.0.0'
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    implementation 'no.nordicsemi.android:dfu:2.0.1'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.5.0'
 }

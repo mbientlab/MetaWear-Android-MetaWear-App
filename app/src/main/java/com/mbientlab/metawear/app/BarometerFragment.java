@@ -38,6 +38,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import com.mbientlab.metawear.Route;
 import com.mbientlab.metawear.UnsupportedModuleException;
@@ -89,7 +90,7 @@ public class BarometerFragment extends SensorFragment {
         barometer.pressure().addRouteAsync(source -> source.stream((data, env) -> {
             LineData chartData = chart.getData();
             if (pressureData.size() >= sampleCount) {
-                chartData.addXValue(String.format(Locale.US, "%.2f", sampleCount * LIGHT_SAMPLE_PERIOD));
+                chartData.addEntry(new Entry(sampleCount * LIGHT_SAMPLE_PERIOD, sampleCount), 0);
                 sampleCount++;
 
                 updateChart();
@@ -101,7 +102,7 @@ public class BarometerFragment extends SensorFragment {
             return barometer.altitude().addRouteAsync(source -> source.stream((data, env) -> {
                 LineData chartData = chart.getData();
                 if (altitudeData.size() >= sampleCount) {
-                    chartData.addXValue(String.format(Locale.US, "%.2f", sampleCount * LIGHT_SAMPLE_PERIOD));
+                    chartData.addEntry(new Entry(sampleCount * LIGHT_SAMPLE_PERIOD, sampleCount), 0);
                     sampleCount++;
 
                     updateChart();
@@ -154,11 +155,11 @@ public class BarometerFragment extends SensorFragment {
             fos.write(CSV_HEADER.getBytes());
 
             LineData data = chart.getLineData();
-            LineDataSet pressureDataSet = data.getDataSetByIndex(0), altitudeDataSet = data.getDataSetByIndex(1);
-            for (int i = 0; i < data.getXValCount(); i++) {
+            ILineDataSet pressureDataSet = data.getDataSetByIndex(0), altitudeDataSet = data.getDataSetByIndex(1);
+            for (int i = 0; i < data.getEntryCount(); i++) {
                 fos.write(String.format(Locale.US, "%.3f,%.3f,%.3f%n", i * LIGHT_SAMPLE_PERIOD,
-                        pressureDataSet.getEntryForXIndex(i).getVal(),
-                        altitudeDataSet.getEntryForXIndex(i).getVal()).getBytes());
+                        pressureDataSet.getEntryForIndex(i).getX(),
+                        altitudeDataSet.getEntryForIndex(i).getX()).getBytes());
             }
             fos.close();
             return filename;

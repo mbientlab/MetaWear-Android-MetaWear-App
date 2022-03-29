@@ -37,6 +37,7 @@ import android.graphics.Color;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -53,9 +54,11 @@ public abstract class ThreeAxisChartFragment extends SensorFragment {
 
     protected void addChartData(float x0, float x1, float x2, float samplePeriod) {
         LineData chartData = chart.getData();
-        chartData.addXValue(String.format(Locale.US, "%.2f", sampleCount * samplePeriod));
+        chartData.addEntry(new Entry(sampleCount * samplePeriod, sampleCount), 0);
         chartData.addEntry(new Entry(x0, sampleCount), 0);
+        chartData.addEntry(new Entry(sampleCount * samplePeriod, sampleCount), 1);
         chartData.addEntry(new Entry(x1, sampleCount), 1);
+        chartData.addEntry(new Entry(sampleCount * samplePeriod, sampleCount), 2);
         chartData.addEntry(new Entry(x2, sampleCount), 2);
 
         sampleCount++;
@@ -85,13 +88,13 @@ public abstract class ThreeAxisChartFragment extends SensorFragment {
             fos.write(CSV_HEADER.getBytes());
 
             LineData data = chart.getLineData();
-            LineDataSet xSpinDataSet = data.getDataSetByIndex(0), ySpinDataSet = data.getDataSetByIndex(1),
+            ILineDataSet xSpinDataSet = data.getDataSetByIndex(0), ySpinDataSet = data.getDataSetByIndex(1),
                     zSpinDataSet = data.getDataSetByIndex(2);
-            for (int i = 0; i < data.getXValCount(); i++) {
+            for (int i = 0; i < data.getEntryCount(); i++) {
                 fos.write(String.format(Locale.US, "%.3f,%.3f,%.3f,%.3f%n", i * samplePeriod,
-                        xSpinDataSet.getEntryForXIndex(i).getVal(),
-                        ySpinDataSet.getEntryForXIndex(i).getVal(),
-                        zSpinDataSet.getEntryForXIndex(i).getVal()).getBytes());
+                        xSpinDataSet.getEntryForIndex(i).getX(),
+                        ySpinDataSet.getEntryForIndex(i).getY(),
+                        zSpinDataSet.getEntryForIndex(i).getX()).getBytes());
             }
             fos.close();
             return filename;

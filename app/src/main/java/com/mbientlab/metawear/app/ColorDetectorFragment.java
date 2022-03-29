@@ -44,6 +44,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import com.mbientlab.metawear.ForcedDataProducer;
 import com.mbientlab.metawear.UnsupportedModuleException;
@@ -128,10 +129,10 @@ public class ColorDetectorFragment extends SensorFragment {
         colorAdc.addRouteAsync(source -> source.stream((data, env) -> {
             LineData chartData = chart.getData();
             if (startTime == -1) {
-                chartData.addXValue("0");
+                chartData.addEntry(new Entry(0, sampleCount), 0);
                 startTime = System.currentTimeMillis();
             } else {
-                chartData.addXValue(String.format(Locale.US, "%.2f", (sampleCount * COLOR_SAMPLE_PERIOD) / 1000.f));
+                chartData.addEntry(new Entry(((sampleCount * COLOR_SAMPLE_PERIOD) / 1000.f), sampleCount), 0);
             }
 
             ColorAdc adc= data.value(ColorAdc.class);
@@ -197,12 +198,12 @@ public class ColorDetectorFragment extends SensorFragment {
             fos.write(CSV_HEADER.getBytes());
 
             LineData data = chart.getLineData();
-            LineDataSet clearDataSet = data.getDataSetByIndex(0), redDataSet = data.getDataSetByIndex(1),
+            ILineDataSet clearDataSet = data.getDataSetByIndex(0), redDataSet = data.getDataSetByIndex(1),
                     greenDataSet = data.getDataSetByIndex(2), blueDataSet = data.getDataSetByIndex(3);
-            for (int i = 0; i < data.getXValCount(); i++) {
+            for (int i = 0; i < data.getEntryCount(); i++) {
                 fos.write(String.format(Locale.US, "%.3f,%.3f,%.3f,%.3f,%.3f%n", (i * COLOR_SAMPLE_PERIOD) / 1000.f,
-                        clearDataSet.getEntryForXIndex(i).getVal(), redDataSet.getEntryForXIndex(i).getVal(),
-                        greenDataSet.getEntryForXIndex(i).getVal(), blueDataSet.getEntryForXIndex(i).getVal()).getBytes());
+                        clearDataSet.getEntryForIndex(i).getX(), redDataSet.getEntryForIndex(i).getX(),
+                        greenDataSet.getEntryForIndex(i).getX(), blueDataSet.getEntryForIndex(i).getX()).getBytes());
             }
             fos.close();
             return filename;
