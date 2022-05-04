@@ -55,7 +55,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText android:id="@+id/settings_ad_name_value" android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/settings_ad_name_value" android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text" />
 
@@ -69,7 +69,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText android:id="@+id/settings_ad_interval_value" android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/settings_ad_interval_value" android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number" />
 
@@ -83,7 +83,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText android:id="@+id/settings_ad_timeout_value" android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/settings_ad_timeout_value" android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number" />
 
@@ -97,7 +97,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText android:id="@+id/settings_tx_power_value" android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/settings_tx_power_value" android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberSigned" />
 

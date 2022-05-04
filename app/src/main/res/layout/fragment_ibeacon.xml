@@ -46,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 app:hintTextAppearance="@style/EditTextLabel"
                 android:hint="@string/config_name_ad_device_name"
@@ -54,13 +54,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText android:id="@+id/ibeacon_uuid_value" android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/ibeacon_uuid_value" android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 app:hintTextAppearance="@style/EditTextLabel"
                 android:hint="@string/config_name_ibeacon_major"
@@ -68,13 +68,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText android:id="@+id/ibeacon_major_value" android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/ibeacon_major_value" android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 app:hintTextAppearance="@style/EditTextLabel"
                 android:hint="@string/config_name_ibeacon_minor"
@@ -82,13 +82,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText android:id="@+id/ibeacon_minor_value" android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/ibeacon_minor_value" android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 app:hintTextAppearance="@style/EditTextLabel"
                 android:hint="@string/config_name_ibeacon_rx"
@@ -96,13 +96,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText android:id="@+id/ibeacon_rx_power_value" android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/ibeacon_rx_power_value" android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberSigned" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 app:hintTextAppearance="@style/EditTextLabel"
                 android:hint="@string/config_name_ibeacon_tx"
@@ -110,13 +110,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText android:id="@+id/ibeacon_tx_power_value" android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/ibeacon_tx_power_value" android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberSigned" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 app:hintTextAppearance="@style/EditTextLabel"
                 android:hint="@string/config_name_ibeacon_period"
@@ -124,11 +124,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText android:id="@+id/ibeacon_period_value" android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/ibeacon_period_value" android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
     </ScrollView>

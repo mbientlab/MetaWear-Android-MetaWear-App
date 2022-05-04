@@ -36,33 +36,33 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin" >
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
         app:hintTextAppearance="@style/EditTextLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/duty_cycle_value_wrapper" >
 
-        <EditText android:id="@+id/duty_cycle_value" android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputEditText android:id="@+id/duty_cycle_value" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:hint="@string/config_name_haptic_duty_cycle"
             android:inputType="number|numberDecimal"
             android:singleLine="true" />
 
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
         app:hintTextAppearance="@style/EditTextLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/pulse_width_value_wrapper" >
 
-        <EditText android:id="@+id/pulse_width_value" android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputEditText android:id="@+id/pulse_width_value" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:hint="@string/config_name_haptic_pulse_width"
             android:inputType="number"
             android:maxLines="1" android:singleLine="true" />
 
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <include layout="@layout/layout_two_button" />
 </LinearLayout>

@@ -40,7 +40,7 @@
             android:orientation="vertical" android:layout_width="fill_parent"
             android:layout_height="wrap_content">
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 app:hintTextAppearance="@style/EditTextLabel"
                 android:hint="@string/config_name_neopixel_strand"
@@ -48,14 +48,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText android:id="@+id/neopixel_strand_value"
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/neopixel_strand_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 app:hintTextAppearance="@style/EditTextLabel"
                 android:hint="@string/config_name_neopixel_data_pin"
@@ -63,14 +63,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText android:id="@+id/neopixel_data_pin_value"
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/neopixel_data_pin_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 app:hintTextAppearance="@style/EditTextLabel"
                 android:hint="@string/config_name_neopixel_n_leds"
@@ -78,12 +78,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText android:id="@+id/neopixel_nleds_value"
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/neopixel_nleds_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:text="@string/config_name_neopixel_strand_speed"
@@ -141,7 +141,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 app:hintTextAppearance="@style/EditTextLabel"
                 android:hint="@string/config_name_neopixel_rotation_period"
@@ -149,12 +149,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText android:id="@+id/neopixel_rot_period_value"
+                <com.google.android.material.textfield.TextInputEditText android:id="@+id/neopixel_rot_period_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <include layout="@layout/layout_two_button" android:id="@+id/neopixel_rotate" />
 

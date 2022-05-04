@@ -36,61 +36,61 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin" >
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
         app:hintTextAppearance="@style/EditTextLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/i2c_device_address_value_wrapper" >
 
-        <EditText android:id="@+id/i2c_device_address_value" android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputEditText android:id="@+id/i2c_device_address_value" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:hint="@string/config_name_i2c_device"
             android:singleLine="true"
             android:inputType="text" />
 
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
         app:hintTextAppearance="@style/EditTextLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/config_name_i2c_register_wrapper" >
 
-        <EditText android:id="@+id/config_name_i2c_register_value" android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputEditText android:id="@+id/config_name_i2c_register_value" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:hint="@string/config_name_i2c_register"
             android:inputType="text"
             android:maxLines="1" android:singleLine="true" />
 
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
         app:hintTextAppearance="@style/EditTextLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/config_name_i2c_n_bytes_value_wrapper" >
 
-        <EditText android:id="@+id/config_name_i2c_n_bytes_value" android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputEditText android:id="@+id/config_name_i2c_n_bytes_value" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:hint="@string/config_name_i2c_n_bytes"
             android:maxLines="1" android:singleLine="true"
             android:inputType="none" />
 
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
         app:hintTextAppearance="@style/EditTextLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/config_name_i2c_value_wrapper" >
 
-        <EditText android:id="@+id/config_name_i2c_value" android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputEditText android:id="@+id/config_name_i2c_value" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:hint="@string/config_name_i2c_value"
             android:inputType="none"
             android:maxLines="1" android:singleLine="true" />
 
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <include layout="@layout/layout_two_button" />
 </LinearLayout>

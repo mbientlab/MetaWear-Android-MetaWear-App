@@ -62,7 +62,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             xmlns:app="http://schemas.android.com/apk/res-auto"
             app:hintTextAppearance="@style/EditTextLabel"
             android:hint="@string/config_name_temp_data_pin"
@@ -71,14 +71,14 @@
             android:layout_height="wrap_content"
             android:visibility="gone" >
 
-            <EditText android:id="@+id/ext_thermistor_data_pin"
+            <com.google.android.material.textfield.TextInputEditText android:id="@+id/ext_thermistor_data_pin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             xmlns:app="http://schemas.android.com/apk/res-auto"
             app:hintTextAppearance="@style/EditTextLabel"
             android:hint="@string/config_name_temp_pulldown_pin"
@@ -87,12 +87,12 @@
             android:layout_height="wrap_content"
             android:visibility="gone" >
 
-            <EditText android:id="@+id/ext_thermistor_pulldown_pin"
+            <com.google.android.material.textfield.TextInputEditText android:id="@+id/ext_thermistor_pulldown_pin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:text="@string/config_name_temp_active"
