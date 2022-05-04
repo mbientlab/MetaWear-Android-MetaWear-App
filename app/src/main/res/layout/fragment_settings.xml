@@ -47,7 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 app:hintTextAppearance="@style/EditTextLabel"
                 android:hint="@string/config_name_ad_device_name"
@@ -59,9 +59,9 @@
                     android:layout_height="wrap_content"
                     android:inputType="text" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 app:hintTextAppearance="@style/EditTextLabel"
                 android:hint="@string/config_name_ad_interval"
@@ -73,9 +73,9 @@
                     android:layout_height="wrap_content"
                     android:inputType="number" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 app:hintTextAppearance="@style/EditTextLabel"
                 android:hint="@string/config_name_ad_timeout"
@@ -87,9 +87,9 @@
                     android:layout_height="wrap_content"
                     android:inputType="number" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 app:hintTextAppearance="@style/EditTextLabel"
                 android:hint="@string/config_name_ad_tx"
@@ -101,7 +101,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="numberSigned" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
     </ScrollView>
