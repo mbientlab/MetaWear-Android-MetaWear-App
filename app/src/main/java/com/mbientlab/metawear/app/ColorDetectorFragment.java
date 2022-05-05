@@ -175,7 +175,7 @@ public class ColorDetectorFragment extends SensorFragment {
         final int[] lineColors= new int[] {Color.BLACK, Color.RED, Color.GREEN, Color.BLUE};
         final String[] setName= new String[] {"clear", "red", "green", "blue"};
 
-        LineData data= new LineData(chartXValues);
+        LineData data= new LineData();
         for(int i= 0; i < colorAdc.size(); i++) {
             LineDataSet dataSet= new LineDataSet(colorAdc.get(i), setName[i]);
             dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);

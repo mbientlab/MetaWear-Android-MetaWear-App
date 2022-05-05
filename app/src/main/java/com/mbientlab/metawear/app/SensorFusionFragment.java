@@ -226,7 +226,7 @@ public class SensorFusionFragment extends SensorFragment {
         spinAxisData.get(3).setColor(Color.BLUE);
         spinAxisData.get(3).setDrawCircles(false);
 
-        LineData data= new LineData(chartXValues);
+        LineData data= new LineData();
         for(LineDataSet set: spinAxisData) {
             data.addDataSet(set);
         }

@@ -18,6 +18,8 @@ import com.mbientlab.metawear.MetaWearBoard;
 import com.mbientlab.metawear.android.BtleService;
 import com.mbientlab.metawear.module.Settings;
 
+import com.github.mikephil.charting.utils.Utils;
+
 import java.util.UUID;
 
 import bolts.Task;
@@ -61,6 +63,8 @@ public class ScannerActivity extends AppCompatActivity implements ScannerCommuni
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanner);
+
+        Utils.init(this);
 
         getApplicationContext().bindService(new Intent(this, BtleService.class), this, BIND_AUTO_CREATE);
     }

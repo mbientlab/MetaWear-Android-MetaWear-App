@@ -47,17 +47,8 @@ import android.widget.Button;
 import android.widget.Switch;
 
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.DataSet;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IFillFormatter;
-import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
-import com.github.mikephil.charting.model.GradientColor;
-import com.github.mikephil.charting.utils.MPPointF;
 import com.mbientlab.metawear.Route;
 
 import java.io.File;
@@ -69,7 +60,7 @@ import java.util.List;
  * Created by etsai on 8/19/2015.
  */
 public abstract class SensorFragment extends ModuleFragmentBase {
-    protected final ILineDataSet chartXValues= new LineDataSet(null, "Sensor Data");
+    protected final ArrayList<String> chartXValues= new ArrayList<>();
     protected LineChart chart;
     protected int sampleCount;
     protected long prevUpdate = -1;
@@ -105,7 +96,7 @@ public abstract class SensorFragment extends ModuleFragmentBase {
     private void moveViewToLast() {
         chart.setVisibleXRangeMinimum(120);
         chart.setVisibleXRangeMaximum(120);
-        chart.moveViewToX(Math.max(0f, chartXValues.getEntryCount() - 1));
+        chart.moveViewToX(Math.max(0f, chartXValues.size() - 1));
     }
 
     @Override
@@ -193,9 +184,8 @@ public abstract class SensorFragment extends ModuleFragmentBase {
     protected void initializeChart() {
         ///< configure axis settings
         YAxis leftAxis = chart.getAxisLeft();
-        leftAxis.setStartAtZero(false);
-        leftAxis.setAxisMaxValue(max);
-        leftAxis.setAxisMinValue(min);
+        leftAxis.setAxisMaximum(max);
+        leftAxis.setAxisMinimum(min);
         chart.getAxisRight().setEnabled(false);
     }
 

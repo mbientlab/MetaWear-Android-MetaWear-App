@@ -77,15 +77,15 @@ public abstract class SingleDataSensorFragment extends SensorFragment {
             fos.write(CSV_HEADER.getBytes());
 
             LineData data = chart.getLineData();
-            String[] chartXValues= data.getDataSetLabels();
+            //String[] chartXValues= data.getDataSetLabels();
             ILineDataSet tempDataSet = data.getDataSetByIndex(0);
             if (samplingPeriod < 0) {
-                for (int i = 0; i < chartXValues.length; i++) {
-                    fos.write(String.format(Locale.US, "%s,%.3f%n", chartXValues[i], tempDataSet.getEntryForIndex(i).getX()).getBytes());
+                for (int i = 0; i < chartXValues.size(); i++) {
+                    fos.write(String.format(Locale.US, "%s,%.3f%n", chartXValues.get(i), tempDataSet.getEntryForIndex(i).getY()).getBytes());
                 }
             } else {
-                for (int i = 0; i < data.getEntryCount(); i++) {
-                    fos.write(String.format(Locale.US, "%.3f,%.3f%n", i * samplingPeriod, tempDataSet.getEntryForIndex(i).getX()).getBytes());
+                for (int i = 0; i < tempDataSet.getEntryCount(); i++) {
+                    fos.write(String.format(Locale.US, "%.3f,%.3f%n", i * samplingPeriod, tempDataSet.getEntryForIndex(i).getY()).getBytes());
                 }
             }
             fos.close();
@@ -103,14 +103,14 @@ public abstract class SingleDataSensorFragment extends SensorFragment {
             sensorData.clear();
             sampleCount = 0;
         }
-
         LineDataSet tempDataSet = new LineDataSet(sensorData, csvHeaderDataName);
         tempDataSet.setColor(Color.MAGENTA);
         tempDataSet.setDrawCircles(false);
 
-        LineData data= new LineData(chartXValues);
-        data.addDataSet(tempDataSet);
+        LineData data= new LineData(tempDataSet);
         data.setDrawValues(false);
+
+        data.addEntry(new Entry(0, 0), 0);
         chart.setData(data);
     }
 }

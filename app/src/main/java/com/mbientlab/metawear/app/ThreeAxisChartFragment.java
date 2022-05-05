@@ -127,7 +127,7 @@ public abstract class ThreeAxisChartFragment extends SensorFragment {
         spinAxisData.get(2).setColor(Color.BLUE);
         spinAxisData.get(2).setDrawCircles(false);
 
-        LineData data= new LineData(chartXValues);
+        LineData data= new LineData();
         for(LineDataSet set: spinAxisData) {
             data.addDataSet(set);
         }
