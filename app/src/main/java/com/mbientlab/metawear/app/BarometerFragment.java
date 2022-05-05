@@ -31,6 +31,8 @@
 
 package com.mbientlab.metawear.app;
 
+import static java.lang.Integer.min;
+
 import android.content.Context;
 import android.graphics.Color;
 
@@ -89,25 +91,33 @@ public class BarometerFragment extends SensorFragment {
 
         barometer.pressure().addRouteAsync(source -> source.stream((data, env) -> {
             LineData chartData = chart.getData();
+            if (sampleCount == 0) {
+                chartData.removeEntry(0,0);
+                chartData.removeEntry(0,1);
+            }
             if (pressureData.size() >= sampleCount) {
-                chartData.addEntry(new Entry(sampleCount * LIGHT_SAMPLE_PERIOD, sampleCount), 0);
+                chartXValues.add(String.format(Locale.US, "%.2f", sampleCount*LIGHT_SAMPLE_PERIOD));
                 sampleCount++;
 
                 updateChart();
             }
-            chartData.addEntry(new Entry(data.value(Float.class), sampleCount), 0);
+            chartData.addEntry(new Entry(sampleCount, data.value(Float.class)), 0);
         })).continueWithTask(task -> {
             streamRoute = task.getResult();
 
             return barometer.altitude().addRouteAsync(source -> source.stream((data, env) -> {
                 LineData chartData = chart.getData();
+                if (sampleCount == 0) {
+                    chartData.removeEntry(0,0);
+                    chartData.removeEntry(0,1);
+                }
                 if (altitudeData.size() >= sampleCount) {
-                    chartData.addEntry(new Entry(sampleCount * LIGHT_SAMPLE_PERIOD, sampleCount), 0);
+                    chartXValues.add(String.format(Locale.US, "%.2f", sampleCount*LIGHT_SAMPLE_PERIOD));
                     sampleCount++;
 
                     updateChart();
                 }
-                chartData.addEntry(new Entry(data.value(Float.class), sampleCount), 1);
+                chartData.addEntry(new Entry(sampleCount, data.value(Float.class)), 1);
             }));
         }).continueWith(task -> {
             altitudeRoute = task.getResult();
@@ -123,14 +133,12 @@ public class BarometerFragment extends SensorFragment {
     protected void initializeChart() {
         ///< configure axis settings
         YAxis leftAxis = chart.getAxisLeft();
-        leftAxis.setStartAtZero(false);
-        leftAxis.setAxisMaxValue(max);
-        leftAxis.setAxisMinValue(min);
+        leftAxis.setAxisMaximum(max);
+        leftAxis.setAxisMinimum(min);
 
         YAxis rightAxis = chart.getAxisRight();
-        rightAxis.setStartAtZero(false);
-        rightAxis.setAxisMaxValue(altitudeMax);
-        rightAxis.setAxisMinValue(altitudeMin);
+        rightAxis.setAxisMaximum(altitudeMax);
+        rightAxis.setAxisMinimum(altitudeMin);
     }
 
     @Override
@@ -156,10 +164,11 @@ public class BarometerFragment extends SensorFragment {
 
             LineData data = chart.getLineData();
             ILineDataSet pressureDataSet = data.getDataSetByIndex(0), altitudeDataSet = data.getDataSetByIndex(1);
-            for (int i = 0; i < data.getEntryCount(); i++) {
+            int dataLen = min(pressureDataSet.getEntryCount(), altitudeDataSet.getEntryCount());
+            for (int i = 0; i < dataLen; i++) {
                 fos.write(String.format(Locale.US, "%.3f,%.3f,%.3f%n", i * LIGHT_SAMPLE_PERIOD,
-                        pressureDataSet.getEntryForIndex(i).getX(),
-                        altitudeDataSet.getEntryForIndex(i).getX()).getBytes());
+                        pressureDataSet.getEntryForIndex(i).getY(),
+                        altitudeDataSet.getEntryForIndex(i).getY()).getBytes());
             }
             fos.close();
             return filename;
@@ -179,11 +188,14 @@ public class BarometerFragment extends SensorFragment {
         }
 
         ArrayList<LineDataSet> spinAxisData= new ArrayList<>();
+
+        pressureData.add(new Entry(0, 0));
         spinAxisData.add(new LineDataSet(pressureData, "pressure"));
         spinAxisData.get(0).setAxisDependency(YAxis.AxisDependency.LEFT);
         spinAxisData.get(0).setColor(Color.RED);
         spinAxisData.get(0).setDrawCircles(false);
 
+        altitudeData.add(new Entry(0, 0));
         spinAxisData.add(new LineDataSet(altitudeData, "altitude"));
         spinAxisData.get(1).setAxisDependency(YAxis.AxisDependency.RIGHT);
         spinAxisData.get(1).setColor(Color.GREEN);
