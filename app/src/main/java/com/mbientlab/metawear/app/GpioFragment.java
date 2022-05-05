@@ -82,13 +82,13 @@ public class GpioFragment extends SingleDataSensorFragment {
 
         LineData chartData = chart.getData();
         if (startTime == -1) {
-            chartData.addEntry(new Entry(0, sampleCount), 0);
-            startTime= System.currentTimeMillis();
+            chartData.removeEntry(0,0);
+            chartXValues.add("0");
+            startTime = System.currentTimeMillis();
         } else {
-            chartData.addEntry(new Entry(sampleCount * samplingPeriod, sampleCount), 0);
+            chartXValues.add(String.format(Locale.US, "%.2f", sampleCount*samplingPeriod));
         }
-
-        chartData.addEntry(new Entry(gpioValue, sampleCount), 0);
+        chartData.addEntry(new Entry(sampleCount, gpioValue), 0);
 
         sampleCount++;
 
@@ -216,13 +216,13 @@ public class GpioFragment extends SingleDataSensorFragment {
 
                     LineData chartData = chart.getData();
                     if (startTime == -1) {
-                        chartData.addEntry(new Entry(0, sampleCount), 0);
-                        startTime= System.currentTimeMillis();
+                        chartData.removeEntry(0,0);
+                        chartXValues.add("0");
+                        startTime = System.currentTimeMillis();
                     } else {
-                        chartData.addEntry(new Entry(sampleCount * samplingPeriod, sampleCount), 0);
+                        chartXValues.add(String.format(Locale.US, "%.2f", sampleCount*samplingPeriod));
                     }
-
-                    chartData.addEntry(new Entry(voltage, sampleCount), 0);
+                    chartData.addEntry(new Entry(sampleCount, voltage), 0);
 
                     sampleCount++;
                 }));

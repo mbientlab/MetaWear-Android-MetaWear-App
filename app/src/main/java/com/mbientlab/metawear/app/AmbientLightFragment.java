@@ -140,14 +140,14 @@ public class AmbientLightFragment extends SingleDataSensorFragment {
                 final Float lux = data.value(Float.class);
 
                 LineData chartData = chart.getData();
-
                 if (startTime == -1) {
-                    chartData.addEntry(new Entry(0, sampleCount),0);
-                    startTime= System.currentTimeMillis();
+                    chartData.removeEntry(0,0);
+                    chartXValues.add("0");
+                    startTime = System.currentTimeMillis();
                 } else {
-                    chartData.addEntry(new Entry(sampleCount * samplingPeriod, sampleCount),0);
+                    chartXValues.add(String.format(Locale.US, "%.2f", sampleCount*samplingPeriod));
                 }
-                chartData.addEntry(new Entry(lux, sampleCount), 0);
+                chartData.addEntry(new Entry(sampleCount, lux), 0);
 
                 sampleCount++;
                 updateChart();

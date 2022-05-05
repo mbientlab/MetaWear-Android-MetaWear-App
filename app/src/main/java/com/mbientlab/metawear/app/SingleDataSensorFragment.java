@@ -67,10 +67,11 @@ public abstract class SingleDataSensorFragment extends SensorFragment {
     @Override
     protected String saveData() {
         final String CSV_HEADER = String.format("time,%s%n", csvHeaderDataName);
-        String filename = String.format(Locale.US, "%s_%tY%<tm%<td-%<tH%<tM%<tS%<tL.csv", getContext().getString(sensorResId), Calendar.getInstance());
+        String filename = String.format(Locale.US, "%s_%tY%<tm%<td-%<tH%<tM%<tS%<tL", getContext().getString(sensorResId), Calendar.getInstance());
         if (!filenameExtraString.isEmpty()) {
             filename+= "_" + filenameExtraString;
         }
+        filename+= ".csv";
 
         try {
             FileOutputStream fos = getActivity().openFileOutput(filename, Context.MODE_PRIVATE);
