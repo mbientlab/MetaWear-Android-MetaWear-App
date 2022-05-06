@@ -121,15 +121,20 @@ public class SensorFusionFragment extends SensorFragment {
             sensorFusion.quaternion().addRouteAsync(source -> source.stream((data, env) -> {
                 LineData chartData = chart.getData();
 
+                if (sampleCount == 0) {
+                    chartData.removeEntry(0, 0);
+                    chartData.removeEntry(0, 1);
+                    chartData.removeEntry(0, 2);
+                    chartData.removeEntry(0, 3);
+                }
+
                 final Quaternion quaternion = data.value(Quaternion.class);
-                chartData.addEntry(new Entry(sampleCount * SAMPLING_PERIOD, sampleCount), 0);
-                chartData.addEntry(new Entry(sampleCount * SAMPLING_PERIOD, sampleCount), 1);
-                chartData.addEntry(new Entry(sampleCount * SAMPLING_PERIOD, sampleCount), 2);
-                chartData.addEntry(new Entry(sampleCount * SAMPLING_PERIOD, sampleCount), 3);
-                chartData.addEntry(new Entry(quaternion.w(), sampleCount), 0);
-                chartData.addEntry(new Entry(quaternion.x(), sampleCount), 1);
-                chartData.addEntry(new Entry(quaternion.y(), sampleCount), 2);
-                chartData.addEntry(new Entry(quaternion.z(), sampleCount), 3);
+                chartXValues.add(String.format(Locale.US, "%.2f", sampleCount * SAMPLING_PERIOD));
+
+                chartData.addEntry(new Entry(sampleCount, quaternion.w()), 0);
+                chartData.addEntry(new Entry(sampleCount, quaternion.x()), 1);
+                chartData.addEntry(new Entry(sampleCount, quaternion.y()), 2);
+                chartData.addEntry(new Entry(sampleCount, quaternion.z()), 3);
 
                 sampleCount++;
 
@@ -145,15 +150,20 @@ public class SensorFusionFragment extends SensorFragment {
             sensorFusion.eulerAngles().addRouteAsync(source -> source.stream((data, env) -> {
                 LineData chartData = chart.getData();
 
+                if (sampleCount == 0) {
+                    chartData.removeEntry(0, 0);
+                    chartData.removeEntry(0, 1);
+                    chartData.removeEntry(0, 2);
+                    chartData.removeEntry(0, 3);
+                }
+
                 final EulerAngles angles = data.value(EulerAngles.class);
-                chartData.addEntry(new Entry(sampleCount * SAMPLING_PERIOD, sampleCount), 0);
-                chartData.addEntry(new Entry(sampleCount * SAMPLING_PERIOD, sampleCount), 1);
-                chartData.addEntry(new Entry(sampleCount * SAMPLING_PERIOD, sampleCount), 2);
-                chartData.addEntry(new Entry(sampleCount * SAMPLING_PERIOD, sampleCount), 3);
-                chartData.addEntry(new Entry(angles.heading(), sampleCount), 0);
-                chartData.addEntry(new Entry(angles.pitch(), sampleCount), 1);
-                chartData.addEntry(new Entry(angles.roll(), sampleCount), 2);
-                chartData.addEntry(new Entry(angles.yaw(), sampleCount), 3);
+                chartXValues.add(String.format(Locale.US, "%.2f", sampleCount * SAMPLING_PERIOD));
+
+                chartData.addEntry(new Entry(sampleCount, angles.heading()), 0);
+                chartData.addEntry(new Entry(sampleCount, angles.pitch()), 1);
+                chartData.addEntry(new Entry(sampleCount, angles.roll()), 2);
+                chartData.addEntry(new Entry(sampleCount, angles.yaw()), 3);
 
                 sampleCount++;
 
@@ -185,10 +195,10 @@ public class SensorFusionFragment extends SensorFragment {
             LineData data = chart.getLineData();
             ILineDataSet x0DataSet = data.getDataSetByIndex(0), x1DataSet = data.getDataSetByIndex(1),
                     x2DataSet = data.getDataSetByIndex(2), x3DataSet = data.getDataSetByIndex(3);
-            for (int i = 0; i < data.getEntryCount(); i++) {
+            for (int i = 0; i < x0DataSet.getEntryCount(); i++) {
                 fos.write(String.format(Locale.US, "%.3f,%.3f,%.3f,%.3f,%.3f%n", (i * SAMPLING_PERIOD),
-                        x0DataSet.getEntryForIndex(i).getX(), x1DataSet.getEntryForIndex(i).getX(),
-                        x2DataSet.getEntryForIndex(i).getX(), x3DataSet.getEntryForIndex(i).getX()).getBytes());
+                        x0DataSet.getEntryForIndex(i).getY(), x1DataSet.getEntryForIndex(i).getY(),
+                        x2DataSet.getEntryForIndex(i).getY(), x3DataSet.getEntryForIndex(i).getY()).getBytes());
             }
             fos.close();
             return filename;
@@ -210,18 +220,22 @@ public class SensorFusionFragment extends SensorFragment {
         }
 
         ArrayList<LineDataSet> spinAxisData= new ArrayList<>();
+        x0.add(new Entry(0, 0));
         spinAxisData.add(new LineDataSet(x0, srcIndex == 0 ? "w" : "heading"));
         spinAxisData.get(0).setColor(Color.BLACK);
         spinAxisData.get(0).setDrawCircles(false);
 
+        x1.add(new Entry(0, 0));
         spinAxisData.add(new LineDataSet(x1, srcIndex == 0 ? "x" : "pitch"));
         spinAxisData.get(1).setColor(Color.RED);
         spinAxisData.get(1).setDrawCircles(false);
 
+        x2.add(new Entry(0, 0));
         spinAxisData.add(new LineDataSet(x2, srcIndex == 0 ? "y" : "roll"));
         spinAxisData.get(2).setColor(Color.GREEN);
         spinAxisData.get(2).setDrawCircles(false);
 
+        x3.add(new Entry(0, 0));
         spinAxisData.add(new LineDataSet(x3, srcIndex == 0 ? "z" : "yaw"));
         spinAxisData.get(3).setColor(Color.BLUE);
         spinAxisData.get(3).setDrawCircles(false);

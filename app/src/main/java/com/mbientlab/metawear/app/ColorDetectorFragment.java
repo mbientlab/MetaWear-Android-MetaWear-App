@@ -129,17 +129,21 @@ public class ColorDetectorFragment extends SensorFragment {
         colorAdc.addRouteAsync(source -> source.stream((data, env) -> {
             LineData chartData = chart.getData();
             if (startTime == -1) {
-                chartData.addEntry(new Entry(0, sampleCount), 0);
+                chartData.removeEntry(0,0);
+                chartData.removeEntry(0,1);
+                chartData.removeEntry(0,2);
+                chartData.removeEntry(0,3);
+                chartXValues.add("0");
                 startTime = System.currentTimeMillis();
             } else {
-                chartData.addEntry(new Entry(((sampleCount * COLOR_SAMPLE_PERIOD) / 1000.f), sampleCount), 0);
+                chartXValues.add(String.format(Locale.US, "%.2f", (sampleCount * COLOR_SAMPLE_PERIOD) / 1000.f));
             }
 
             ColorAdc adc= data.value(ColorAdc.class);
-            chartData.addEntry(new Entry(adc.clear, sampleCount), 0);
-            chartData.addEntry(new Entry(adc.red, sampleCount), 1);
-            chartData.addEntry(new Entry(adc.green, sampleCount), 2);
-            chartData.addEntry(new Entry(adc.blue, sampleCount), 3);
+            chartData.addEntry(new Entry(sampleCount, adc.clear), 0);
+            chartData.addEntry(new Entry(sampleCount, adc.red), 1);
+            chartData.addEntry(new Entry(sampleCount, adc.green), 2);
+            chartData.addEntry(new Entry(sampleCount, adc.blue), 3);
             sampleCount++;
 
             updateChart();
@@ -167,6 +171,7 @@ public class ColorDetectorFragment extends SensorFragment {
 
             for(List<Entry> it: colorAdc) {
                 it.clear();
+                it.add(new Entry(0, 0));
             }
 
             startTime= -1;
@@ -200,10 +205,10 @@ public class ColorDetectorFragment extends SensorFragment {
             LineData data = chart.getLineData();
             ILineDataSet clearDataSet = data.getDataSetByIndex(0), redDataSet = data.getDataSetByIndex(1),
                     greenDataSet = data.getDataSetByIndex(2), blueDataSet = data.getDataSetByIndex(3);
-            for (int i = 0; i < data.getEntryCount(); i++) {
+            for (int i = 0; i < clearDataSet.getEntryCount(); i++) {
                 fos.write(String.format(Locale.US, "%.3f,%.3f,%.3f,%.3f,%.3f%n", (i * COLOR_SAMPLE_PERIOD) / 1000.f,
-                        clearDataSet.getEntryForIndex(i).getX(), redDataSet.getEntryForIndex(i).getX(),
-                        greenDataSet.getEntryForIndex(i).getX(), blueDataSet.getEntryForIndex(i).getX()).getBytes());
+                        clearDataSet.getEntryForIndex(i).getY(), redDataSet.getEntryForIndex(i).getY(),
+                        greenDataSet.getEntryForIndex(i).getY(), blueDataSet.getEntryForIndex(i).getY()).getBytes());
             }
             fos.close();
             return filename;

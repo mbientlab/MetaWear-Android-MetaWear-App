@@ -54,12 +54,17 @@ public abstract class ThreeAxisChartFragment extends SensorFragment {
 
     protected void addChartData(float x0, float x1, float x2, float samplePeriod) {
         LineData chartData = chart.getData();
-        chartData.addEntry(new Entry(sampleCount * samplePeriod, sampleCount), 0);
-        chartData.addEntry(new Entry(x0, sampleCount), 0);
-        chartData.addEntry(new Entry(sampleCount * samplePeriod, sampleCount), 1);
-        chartData.addEntry(new Entry(x1, sampleCount), 1);
-        chartData.addEntry(new Entry(sampleCount * samplePeriod, sampleCount), 2);
-        chartData.addEntry(new Entry(x2, sampleCount), 2);
+
+        if (sampleCount == 0) {
+            chartData.removeEntry(0, 0);
+            chartData.removeEntry(0, 1);
+            chartData.removeEntry(0, 2);
+        }
+
+        chartXValues.add(String.format(Locale.US, "%.2f", sampleCount * samplePeriod));
+        chartData.addEntry(new Entry(sampleCount, x0), 0);
+        chartData.addEntry(new Entry(sampleCount, x1), 1);
+        chartData.addEntry(new Entry(sampleCount, x2), 2);
 
         sampleCount++;
 
@@ -90,11 +95,11 @@ public abstract class ThreeAxisChartFragment extends SensorFragment {
             LineData data = chart.getLineData();
             ILineDataSet xSpinDataSet = data.getDataSetByIndex(0), ySpinDataSet = data.getDataSetByIndex(1),
                     zSpinDataSet = data.getDataSetByIndex(2);
-            for (int i = 0; i < data.getEntryCount(); i++) {
+            for (int i = 0; i < xSpinDataSet.getEntryCount(); i++) {
                 fos.write(String.format(Locale.US, "%.3f,%.3f,%.3f,%.3f%n", i * samplePeriod,
-                        xSpinDataSet.getEntryForIndex(i).getX(),
+                        xSpinDataSet.getEntryForIndex(i).getY(),
                         ySpinDataSet.getEntryForIndex(i).getY(),
-                        zSpinDataSet.getEntryForIndex(i).getX()).getBytes());
+                        zSpinDataSet.getEntryForIndex(i).getY()).getBytes());
             }
             fos.close();
             return filename;
@@ -115,14 +120,17 @@ public abstract class ThreeAxisChartFragment extends SensorFragment {
         }
 
         ArrayList<LineDataSet> spinAxisData= new ArrayList<>();
+        xAxisData.add(new Entry(0, 0));
         spinAxisData.add(new LineDataSet(xAxisData, "x-" + dataType));
         spinAxisData.get(0).setColor(Color.RED);
         spinAxisData.get(0).setDrawCircles(false);
 
+        yAxisData.add(new Entry(0, 0));
         spinAxisData.add(new LineDataSet(yAxisData, "y-" + dataType));
         spinAxisData.get(1).setColor(Color.GREEN);
         spinAxisData.get(1).setDrawCircles(false);
 
+        zAxisData.add(new Entry(0, 0));
         spinAxisData.add(new LineDataSet(zAxisData, "z-" + dataType));
         spinAxisData.get(2).setColor(Color.BLUE);
         spinAxisData.get(2).setDrawCircles(false);
