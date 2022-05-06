@@ -39,8 +39,8 @@ android {
         applicationId "com.mbientlab.metawear.app"
         minSdkVersion 24
         targetSdkVersion 32
-        versionCode 23
-        versionName "3.5.27"
+        versionCode 24
+        versionName "3.6.0"
 
         //jackOptions {
         //    enabled true

@@ -89,6 +89,7 @@ import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import bolts.Capture;
@@ -296,6 +297,9 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
     }
 
     private boolean addMimeType(Object path) {
+        if (path instanceof List) {
+            path = ((List)path).get(0);
+        }
         if (path instanceof File) {
             File filePath= (File) path;
 
@@ -331,8 +335,14 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
     public void initiateDfu(final Object path) {
         starter = new DfuServiceInitiator(btDevice.getAddress())
                 .setDeviceName(btDevice.getName())
+                .setPacketsReceiptNotificationsEnabled(true)
+                .setPacketsReceiptNotificationsValue(10)
                 .setKeepBond(false)
                 .setForceDfu(true);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            DfuServiceInitiator.createDfuNotificationChannel(getApplicationContext());
+        }
 
         // Init packet is required by Bootloader/DFU from SDK 7.0+ if HEX or BIN file is given above.
         // In case of a ZIP file, the init packet (a DAT file) must be included inside the ZIP file.
@@ -348,8 +358,8 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
             if (path == null) {
                 DfuProgressFragment.newInstance(R.string.message_dfu).show(getSupportFragmentManager(), DFU_PROGRESS_FRAGMENT_TAG);
 
-                Capture<File> firmwareCapture = new Capture<>();
-                mwBoard.downloadLatestFirmwareAsync()
+                Capture<List<File>> firmwareCapture = new Capture<>();
+                mwBoard.downloadFirmwareUpdateFilesAsyncV2()
                         .onSuccessTask(task -> {
                             firmwareCapture.set(task.getResult());
                             return mwBoard.inMetaBootMode() ? mwBoard.disconnectAsync() : mwBoard.getModule(Debug.class).jumpToBootloaderAsync();
