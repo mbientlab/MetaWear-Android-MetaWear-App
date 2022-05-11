@@ -60,7 +60,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.mbientlab:metawear:3.8.2'
+    implementation 'com.mbientlab:metawear:3.9.0'
     implementation 'com.mbientlab.bletoolbox:scanner:0.3.2'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'no.nordicsemi.android:dfu:2.0.2'
