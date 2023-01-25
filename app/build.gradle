@@ -37,10 +37,10 @@ android {
 
     defaultConfig {
         applicationId "com.mbientlab.metawear.app"
-        minSdkVersion 24
+        minSdkVersion 30
         targetSdkVersion 33
-        versionCode 24
-        versionName "3.7.0"
+        versionCode 25
+        versionName "4.0.0"
 
         //jackOptions {
         //    enabled true
@@ -53,17 +53,17 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.mbientlab:metawear:3.9.0'
+    implementation 'com.mbientlab:metawear:3.9.0'  //Update to 4.0.0
     implementation 'com.mbientlab.bletoolbox:scanner:0.3.2'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'no.nordicsemi.android:dfu:2.3.0'
     implementation 'androidx.appcompat:appcompat:1.6.0'
-    implementation 'com.google.android.material:material:1.7.0'
+    implementation 'com.google.android.material:material:1.8.0'
 }
