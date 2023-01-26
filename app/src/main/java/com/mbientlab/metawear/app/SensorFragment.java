@@ -32,6 +32,8 @@
 package com.mbientlab.metawear.app;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.DashPathEffect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -168,7 +170,17 @@ public abstract class SensorFragment extends ModuleFragmentBase {
                 intent.setType("text/plain");
                 intent.putExtra(Intent.EXTRA_SUBJECT, filename);
                 intent.putExtra(Intent.EXTRA_STREAM, contentUri);
-                startActivity(Intent.createChooser(intent, "Saving Data"));
+
+                Intent chooser = Intent.createChooser(intent, "Saving Data");
+
+                List<ResolveInfo> resInfoList = getContext().getPackageManager().queryIntentActivities(chooser, PackageManager.MATCH_DEFAULT_ONLY);
+
+                for (ResolveInfo resolveInfo : resInfoList) {
+                    String packageName = resolveInfo.activityInfo.packageName;
+                    getContext().grantUriPermission(packageName, contentUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                }
+
+                startActivity(chooser);
             }
         });
     }
