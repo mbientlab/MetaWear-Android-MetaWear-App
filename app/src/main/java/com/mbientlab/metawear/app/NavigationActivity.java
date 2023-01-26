@@ -118,7 +118,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         tempMap.put(R.id.nav_accelerometer, AccelerometerFragment.class);
         tempMap.put(R.id.nav_barometer, BarometerFragment.class);
         tempMap.put(R.id.nav_color_detector, ColorDetectorFragment.class);
-        tempMap.put(R.id.nav_gpio, GpioFragment.class);
+        // tempMap.put(R.id.nav_gpio, GpioFragment.class);
         tempMap.put(R.id.nav_gyro, GyroFragment.class);
         tempMap.put(R.id.nav_haptic, HapticFragment.class);
         tempMap.put(R.id.nav_humidity, HumidityFragment.class);
@@ -126,7 +126,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         tempMap.put(R.id.nav_i2c, I2CFragment.class);
         tempMap.put(R.id.nav_light, AmbientLightFragment.class);
         tempMap.put(R.id.nav_magnetometer, MagnetometerFragment.class);
-        tempMap.put(R.id.nav_neopixel, NeoPixelFragment.class);
+        // tempMap.put(R.id.nav_neopixel, NeoPixelFragment.class);
         tempMap.put(R.id.nav_proximity, ProximityFragment.class);
         tempMap.put(R.id.nav_sensor_fusion, SensorFusionFragment.class);
         tempMap.put(R.id.nav_settings, SettingsFragment.class);

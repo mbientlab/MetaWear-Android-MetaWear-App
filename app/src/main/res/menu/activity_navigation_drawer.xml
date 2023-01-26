@@ -29,7 +29,6 @@
         <item android:id="@+id/nav_accelerometer" android:title="@string/navigation_fragment_accelerometer" />
         <item android:id="@+id/nav_barometer" android:title="@string/navigation_fragment_barometer" />
         <item android:id="@+id/nav_color_detector" android:title="@string/navigation_fragment_color_detector" />
-        <item android:id="@+id/nav_gpio" android:title="@string/navigation_fragment_gpio" />
         <item android:id="@+id/nav_gyro" android:title="@string/navigation_fragment_gyro" />
         <item android:id="@+id/nav_haptic" android:title="@string/navigation_fragment_haptic" />
         <item android:id="@+id/nav_humidity" android:title="@string/navigation_fragment_humidity" />
@@ -37,7 +36,6 @@
         <!--item android:id="@+id/nav_ibeacon" android:title="@string/navigation_fragment_ibeacon" /-->
         <item android:id="@+id/nav_light" android:title="@string/navigation_fragment_light" />
         <item android:id="@+id/nav_magnetometer" android:title="@string/navigation_fragment_magnetometer" />
-        <item android:id="@+id/nav_neopixel" android:title="@string/navigation_fragment_neopixel" />
         <item android:id="@+id/nav_proximity" android:title="@string/navigation_fragment_proximity" />
         <item android:id="@+id/nav_sensor_fusion" android:title="@string/navigation_fragment_sensor_fusion" />
         <item android:id="@+id/nav_settings" android:title="@string/navigation_fragment_settings" />
