@@ -41,6 +41,7 @@ import android.widget.TextView;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
+import com.mbientlab.metawear.Executors;
 import com.mbientlab.metawear.UnsupportedModuleException;
 import com.mbientlab.metawear.app.help.HelpOption;
 import com.mbientlab.metawear.app.help.HelpOptionAdapter;
@@ -152,7 +153,7 @@ public class AmbientLightFragment extends SingleDataSensorFragment {
                 sampleCount++;
                 updateChart();
             });
-        }).continueWith(task -> {
+        }).continueWith(Executors.IMMEDIATE_EXECUTOR, task -> {
             streamRoute = task.getResult();
             alsltr329.illuminance().start();
             return null;

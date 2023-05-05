@@ -57,6 +57,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.mbientlab:metawear:4.0.0'
+    implementation 'com.google.android.gms:play-services-tasks:18.0.2'
     implementation 'com.mbientlab.bletoolbox:scanner:0.3.2'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'no.nordicsemi.android:dfu:2.3.0'

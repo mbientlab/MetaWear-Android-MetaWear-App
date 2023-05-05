@@ -32,6 +32,7 @@
 package com.mbientlab.metawear.app;
 
 import com.mbientlab.metawear.AsyncDataProducer;
+import com.mbientlab.metawear.Executors;
 import com.mbientlab.metawear.UnsupportedModuleException;
 import com.mbientlab.metawear.app.help.HelpOptionAdapter;
 import com.mbientlab.metawear.data.MagneticField;
@@ -72,7 +73,7 @@ public class MagnetometerFragment extends ThreeAxisChartFragment {
         producer.addRouteAsync(source -> source.stream((data, env) -> {
             final MagneticField value = data.value(MagneticField.class);
             addChartData(value.x() * 1000000f, value.y() * 1000000f, value.z() * 1000000f, period);
-        })).continueWith(task -> {
+        })).continueWith(Executors.IMMEDIATE_EXECUTOR, task -> {
             streamRoute = task.getResult();
 
             magnetometer.magneticField().start();

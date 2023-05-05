@@ -42,6 +42,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import com.mbientlab.metawear.Executors;
 import com.mbientlab.metawear.Route;
 import com.mbientlab.metawear.UnsupportedModuleException;
 import com.mbientlab.metawear.app.help.HelpOptionAdapter;
@@ -102,7 +103,7 @@ public class BarometerFragment extends SensorFragment {
                 updateChart();
             }
             chartData.addEntry(new Entry(sampleCount, data.value(Float.class)), 0);
-        })).continueWithTask(task -> {
+        })).continueWithTask(Executors.IMMEDIATE_EXECUTOR, task -> {
             streamRoute = task.getResult();
 
             return barometer.altitude().addRouteAsync(source -> source.stream((data, env) -> {
@@ -119,7 +120,7 @@ public class BarometerFragment extends SensorFragment {
                 }
                 chartData.addEntry(new Entry(sampleCount, data.value(Float.class)), 1);
             }));
-        }).continueWith(task -> {
+        }).continueWith(Executors.IMMEDIATE_EXECUTOR, task -> {
             altitudeRoute = task.getResult();
 
             barometer.altitude().start();

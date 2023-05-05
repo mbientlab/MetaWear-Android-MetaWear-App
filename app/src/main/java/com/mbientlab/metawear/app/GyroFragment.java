@@ -41,6 +41,7 @@ import android.widget.TextView;
 import com.github.mikephil.charting.components.YAxis;
 
 import com.mbientlab.metawear.AsyncDataProducer;
+import com.mbientlab.metawear.Executors;
 import com.mbientlab.metawear.UnsupportedModuleException;
 import com.mbientlab.metawear.app.help.HelpOption;
 import com.mbientlab.metawear.app.help.HelpOptionAdapter;
@@ -122,7 +123,7 @@ public class GyroFragment extends ThreeAxisChartFragment {
             final AngularVelocity value = data.value(AngularVelocity.class);
             addChartData(value.x(), value.y(), value.z(), period);
             updateChart();
-        })).continueWith(task -> {
+        })).continueWith(Executors.IMMEDIATE_EXECUTOR, task -> {
             streamRoute = task.getResult();
 
             gyro.angularVelocity().start();

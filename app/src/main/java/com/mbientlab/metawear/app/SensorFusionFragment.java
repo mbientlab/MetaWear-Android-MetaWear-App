@@ -46,6 +46,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import com.mbientlab.metawear.Executors;
 import com.mbientlab.metawear.UnsupportedModuleException;
 import com.mbientlab.metawear.app.help.HelpOption;
 import com.mbientlab.metawear.app.help.HelpOptionAdapter;
@@ -139,7 +140,7 @@ public class SensorFusionFragment extends SensorFragment {
                 sampleCount++;
 
                 updateChart();
-            })).continueWith(task -> {
+            })).continueWith(Executors.IMMEDIATE_EXECUTOR, task -> {
                 streamRoute = task.getResult();
                 sensorFusion.quaternion().start();
                 sensorFusion.start();
@@ -168,7 +169,7 @@ public class SensorFusionFragment extends SensorFragment {
                 sampleCount++;
 
                 updateChart();
-            })).continueWith(task -> {
+            })).continueWith(Executors.IMMEDIATE_EXECUTOR, task -> {
                 streamRoute = task.getResult();
                 sensorFusion.eulerAngles().start();
                 sensorFusion.start();

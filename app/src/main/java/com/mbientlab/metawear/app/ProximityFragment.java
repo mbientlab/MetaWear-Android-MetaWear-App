@@ -34,6 +34,7 @@ package com.mbientlab.metawear.app;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 
+import com.mbientlab.metawear.Executors;
 import com.mbientlab.metawear.ForcedDataProducer;
 import com.mbientlab.metawear.UnsupportedModuleException;
 import com.mbientlab.metawear.app.help.HelpOptionAdapter;
@@ -78,10 +79,10 @@ public class ProximityFragment extends SingleDataSensorFragment {
             sampleCount++;
 
             updateChart();
-        })).continueWithTask(task -> {
+        })).continueWithTask(Executors.IMMEDIATE_EXECUTOR, task -> {
             streamRoute = task.getResult();
             return timer.scheduleAsync(PROXIMITY_SAMPLE_PERIOD, false, proximityAdc::read);
-        }).continueWith(task -> {
+        }).continueWith(Executors.IMMEDIATE_EXECUTOR, task -> {
             scheduledTask = task.getResult();
             scheduledTask.start();
 

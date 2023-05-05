@@ -33,20 +33,19 @@ package com.mbientlab.metawear.app;
 
 import android.app.Dialog;
 import android.os.Bundle;
-//import android.support.annotation.NonNull;
 import androidx.annotation.NonNull;
-//import android.support.design.widget.Snackbar;
 import com.google.android.material.snackbar.Snackbar;
-//import androidx.core.app.DialogFragment;
 import androidx.fragment.app.DialogFragment;
-//import android.support.v7.app.AlertDialog;
 import androidx.appcompat.app.AlertDialog;
+
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.mbientlab.metawear.Executors;
 import com.mbientlab.metawear.Route;
 import com.mbientlab.metawear.UnsupportedModuleException;
 import com.mbientlab.metawear.app.help.HelpOptionAdapter;
@@ -55,8 +54,6 @@ import com.mbientlab.metawear.module.Led.Color;
 import com.mbientlab.metawear.module.Switch;
 
 import java.util.Locale;
-
-import bolts.Task;
 
 /**
  * Created by etsai on 8/22/2015.
@@ -105,26 +102,24 @@ public class HomeFragment extends ModuleFragmentBase {
         });
         view.findViewById(R.id.led_stop).setOnClickListener(view14 -> ledModule.stop(true));
         view.findViewById(R.id.board_rssi_text).setOnClickListener(v -> mwBoard.readRssiAsync()
-                .continueWith(task -> {
+                .continueWith(getContext().getMainExecutor(), task -> {
                     ((TextView) view.findViewById(R.id.board_rssi_value)).setText(String.format(Locale.US, "%d dBm", task.getResult()));
                     return null;
-                }, Task.UI_THREAD_EXECUTOR)
+                })
         );
         view.findViewById(R.id.board_battery_level_text).setOnClickListener(v -> mwBoard.readBatteryLevelAsync()
-                .continueWith(task -> {
+                .continueWith(getContext().getMainExecutor(), task -> {
                     ((TextView) view.findViewById(R.id.board_battery_level_value)).setText(String.format(Locale.US, "%d", task.getResult()));
                     return null;
-                }, Task.UI_THREAD_EXECUTOR)
+                })
         );
         view.findViewById(R.id.update_firmware).setOnClickListener(view15 -> mwBoard.checkForFirmwareUpdateAsync()
-                .continueWith(task -> {
-                    if (task.isFaulted()) {
-                        Snackbar.make(getActivity().findViewById(R.id.drawer_layout), task.getError().getLocalizedMessage(), Snackbar.LENGTH_LONG).show();
-                    } else {
-                        setupDfuDialog(new AlertDialog.Builder(getActivity()), task.getResult() ? R.string.message_dfu_accept : R.string.message_dfu_latest);
-                    }
-                    return null;
-                }, Task.UI_THREAD_EXECUTOR)
+                .addOnFailureListener(getContext().getMainExecutor(), exception -> {
+                    Snackbar.make(getActivity().findViewById(R.id.drawer_layout), exception.getLocalizedMessage(), Snackbar.LENGTH_LONG).show();
+                })
+                .addOnSuccessListener(getContext().getMainExecutor(), result -> {
+                        setupDfuDialog(new AlertDialog.Builder(getActivity()), result ? R.string.message_dfu_accept : R.string.message_dfu_latest);
+                })
         );
     }
 
@@ -177,18 +172,16 @@ public class HomeFragment extends ModuleFragmentBase {
             }
         }
 
-        mwBoard.readDeviceInformationAsync().continueWith(task -> {
-            if (task.getResult() != null) {
-                ((TextView) v.findViewById(R.id.manufacturer_value)).setText(task.getResult().manufacturer);
-                ((TextView) v.findViewById(R.id.model_number_value)).setText(task.getResult().modelNumber);
-                ((TextView) v.findViewById(R.id.serial_number_value)).setText(task.getResult().serialNumber);
-                ((TextView) v.findViewById(R.id.firmware_revision_value)).setText(task.getResult().firmwareRevision);
-                ((TextView) v.findViewById(R.id.hardware_revision_value)).setText(task.getResult().hardwareRevision);
+        mwBoard.readDeviceInformationAsync().addOnSuccessListener(getContext().getMainExecutor(), result -> {
+            if (result != null) {
+                ((TextView) v.findViewById(R.id.manufacturer_value)).setText(result.manufacturer);
+                ((TextView) v.findViewById(R.id.model_number_value)).setText(result.modelNumber);
+                ((TextView) v.findViewById(R.id.serial_number_value)).setText(result.serialNumber);
+                ((TextView) v.findViewById(R.id.firmware_revision_value)).setText(result.firmwareRevision);
+                ((TextView) v.findViewById(R.id.hardware_revision_value)).setText(result.hardwareRevision);
                 ((TextView) v.findViewById(R.id.device_mac_address_value)).setText(mwBoard.getMacAddress());
             }
-
-            return null;
-        }, Task.UI_THREAD_EXECUTOR);
+        });
 
         Switch switchModule;
         if ((switchModule= mwBoard.getModule(Switch.class)) != null) {
@@ -211,7 +204,7 @@ public class HomeFragment extends ModuleFragmentBase {
                             v.findViewById(R.id.switch_radio_pressed).setEnabled(false);
                         }
                     }))
-            ).continueWith(task -> switchRouteId = task.getResult().id());
+            ).continueWith(getContext().getMainExecutor(), task -> switchRouteId = task.getResult().id());
         }
 
         int[] ledResIds= new int[] {R.id.led_stop, R.id.led_red_on, R.id.led_green_on, R.id.led_blue_on};

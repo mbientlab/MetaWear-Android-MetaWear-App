@@ -32,9 +32,7 @@
 package com.mbientlab.metawear.app;
 
 import android.os.Bundle;
-//import android.support.design.widget.Snackbar;
 import com.google.android.material.snackbar.Snackbar;
-//import android.support.design.widget.TextInputLayout;
 import com.google.android.material.textfield.TextInputLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,12 +41,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.mbientlab.metawear.Executors;
 import com.mbientlab.metawear.UnsupportedModuleException;
 import com.mbientlab.metawear.app.help.HelpOption;
 import com.mbientlab.metawear.app.help.HelpOptionAdapter;
 import com.mbientlab.metawear.module.SerialPassthrough;
-
-import bolts.Task;
 
 /**
  * Created by etsai on 3/1/2016.
@@ -138,15 +135,13 @@ public class I2CFragment extends ModuleFragmentBase {
 
             if (valid) {
                 serial.readI2cAsync(deviceAddr, registerAddr, nBytes)
-                        .continueWith(task -> {
-                            if (task.isFaulted()) {
-                                Snackbar.make(v12, task.getError().getLocalizedMessage(), Snackbar.LENGTH_LONG).show();
-                                Log.w("MetaWearApp", "Could not read I2C data", task.getError());
-                            } else {
-                                i2cValueText.setText(arrayToHexString(task.getResult()));
-                            }
-                            return null;
-                        }, Task.UI_THREAD_EXECUTOR);
+                        .addOnFailureListener(getContext().getMainExecutor(), exception -> {
+                            Snackbar.make(v12, exception.getLocalizedMessage(), Snackbar.LENGTH_LONG).show();
+                            Log.w("MetaWearApp", "Could not read I2C data", exception);
+                        })
+                        .addOnSuccessListener(getContext().getMainExecutor(), result -> {
+                            i2cValueText.setText(arrayToHexString(result));
+                        });
             }
         });
 

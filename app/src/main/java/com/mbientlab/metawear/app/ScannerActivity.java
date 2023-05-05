@@ -8,12 +8,15 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.IBinder;
-//import android.support.v7.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.mbientlab.bletoolbox.scanner.BleScannerFragment;
 import com.mbientlab.bletoolbox.scanner.BleScannerFragment.*;
+import com.mbientlab.metawear.Executors;
 import com.mbientlab.metawear.MetaWearBoard;
 import com.mbientlab.metawear.android.BtleService;
 import com.mbientlab.metawear.module.Settings;
@@ -21,8 +24,6 @@ import com.mbientlab.metawear.module.Settings;
 import com.github.mikephil.charting.utils.Utils;
 
 import java.util.UUID;
-
-import bolts.Task;
 
 public class ScannerActivity extends AppCompatActivity implements ScannerCommunicationBus, ServiceConnection {
     private final static UUID[] serviceUuids;
@@ -46,13 +47,13 @@ public class ScannerActivity extends AppCompatActivity implements ScannerCommuni
     }
     public static Task<Void> reconnect(final MetaWearBoard board) {
         return board.connectAsync()
-                .continueWithTask(task -> {
-                    if (task.isFaulted()) {
+                .continueWithTask(Executors.IMMEDIATE_EXECUTOR, task -> {
+                    if (task.getException() != null) {
                         return reconnect(board);
-                    } else if (task.isCancelled()) {
+                    } else if (task.isCanceled()) {
                         return task;
                     }
-                    return Task.forResult(null);
+                    return Tasks.forResult(null);
                 });
     }
 
@@ -103,14 +104,14 @@ public class ScannerActivity extends AppCompatActivity implements ScannerCommuni
         connectDialog.show();
 
         mwBoard.connectAsync()
-                .continueWithTask(task -> {
-                    if (task.isCancelled()) {
+                .continueWithTask(getApplicationContext().getMainExecutor(), task -> {
+                    if (task.isCanceled()) {
                         return task;
                     }
-                    return task.isFaulted() ? reconnect(mwBoard) : Task.forResult(null);
+                    return task.getException() != null ? reconnect(mwBoard) : Tasks.forResult(null);
                 })
-                .continueWith(task -> {
-                    if (!task.isCancelled()) {
+                .continueWith(getApplicationContext().getMainExecutor(), task -> {
+                    if (!task.isCanceled()) {
                         setConnInterval(mwBoard.getModule(Settings.class));
                         runOnUiThread(connectDialog::dismiss);
                         Intent navActivityIntent = new Intent(ScannerActivity.this, NavigationActivity.class);

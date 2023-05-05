@@ -40,13 +40,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.mbientlab.metawear.Executors;
 import com.mbientlab.metawear.UnsupportedModuleException;
 import com.mbientlab.metawear.app.help.HelpOption;
 import com.mbientlab.metawear.app.help.HelpOptionAdapter;
 import com.mbientlab.metawear.module.Debug;
 import com.mbientlab.metawear.module.Settings;
-
-import bolts.Task;
 
 /**
  * Created by etsai on 8/22/2015.
@@ -78,18 +77,16 @@ public class SettingsFragment extends ModuleFragmentBase {
         settingsModule= mwBoard.getModuleOrThrow(Settings.class);
 
         settingsModule.readBleAdConfigAsync()
-                .continueWith(task -> {
+                .addOnSuccessListener(getContext().getMainExecutor(), result -> {
                     final int[] configEditText= new int[] {
                             R.id.settings_ad_name_value, R.id.settings_ad_interval_value, R.id.settings_ad_timeout_value, R.id.settings_tx_power_value
                     };
-                    Object[] values= new Object[] {task.getResult().deviceName, task.getResult().interval, task.getResult().timeout, task.getResult().txPower};
+                    Object[] values= new Object[] {result.deviceName, result.interval, result.timeout, result.txPower};
 
                     for (int i= 0; i < values.length; i++) {
                         ((EditText) getView().findViewById(configEditText[i])).setText(values[i].toString());
                     }
-
-                    return null;
-                }, Task.UI_THREAD_EXECUTOR);
+                });
     }
 
     @Override

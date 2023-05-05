@@ -40,6 +40,7 @@ import android.widget.TextView;
 
 import com.github.mikephil.charting.components.YAxis;
 import com.mbientlab.metawear.AsyncDataProducer;
+import com.mbientlab.metawear.Executors;
 import com.mbientlab.metawear.UnsupportedModuleException;
 import com.mbientlab.metawear.app.help.HelpOption;
 import com.mbientlab.metawear.app.help.HelpOptionAdapter;
@@ -129,7 +130,7 @@ public class AccelerometerFragment extends ThreeAxisChartFragment {
         producer.addRouteAsync(source -> source.stream((data, env) -> {
             final Acceleration value = data.value(Acceleration.class);
             addChartData(value.x(), value.y(), value.z(), samplePeriod);
-        })).continueWith(task -> {
+        })).continueWith(Executors.IMMEDIATE_EXECUTOR, task -> {
             streamRoute = task.getResult();
             producer.start();
             accelerometer.start();

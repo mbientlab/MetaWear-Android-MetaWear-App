@@ -44,6 +44,9 @@ import android.provider.MediaStore;
 //import android.support.annotation.NonNull;
 import androidx.annotation.NonNull;
 //import android.support.design.widget.FloatingActionButton;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.SuccessContinuation;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 //import android.support.design.widget.Snackbar;
 import com.google.android.material.snackbar.Snackbar;
@@ -79,6 +82,8 @@ import androidx.core.view.GravityCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.mbientlab.metawear.Capture;
+import com.mbientlab.metawear.Executors;
 import com.mbientlab.metawear.MetaWearBoard;
 import com.mbientlab.metawear.android.BtleService;
 import com.mbientlab.metawear.app.ModuleFragmentBase.FragmentBus;
@@ -92,9 +97,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import bolts.Capture;
-import bolts.Continuation;
-import bolts.Task;
 import no.nordicsemi.android.dfu.DfuBaseService;
 import no.nordicsemi.android.dfu.DfuProgressListener;
 import no.nordicsemi.android.dfu.DfuProgressListenerAdapter;
@@ -259,10 +261,10 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         }
     };
 
-    private Continuation<Void, Void> reconnectResult= task -> {
+    private Continuation<Void, Void> reconnectResult = task -> {
         ((DialogFragment) getSupportFragmentManager().findFragmentByTag(RECONNECT_DIALOG_TAG)).dismiss();
 
-        if (task.isCancelled()) {
+        if (task.isCanceled()) {
             finish();
         } else {
             setConnInterval(mwBoard.getModule(Settings.class));
@@ -280,9 +282,9 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         dialogFragment.show(getSupportFragmentManager(), RECONNECT_DIALOG_TAG);
 
         if (delay != 0) {
-            taskScheduler.postDelayed(() -> ScannerActivity.reconnect(mwBoard).continueWith(reconnectResult), delay);
+            taskScheduler.postDelayed(() -> ScannerActivity.reconnect(mwBoard).continueWith(getApplicationContext().getMainExecutor(), reconnectResult), delay);
         } else {
-            ScannerActivity.reconnect(mwBoard).continueWith(reconnectResult);
+            ScannerActivity.reconnect(mwBoard).continueWith(getApplicationContext().getMainExecutor(), reconnectResult);
         }
     }
 
@@ -360,27 +362,25 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
 
                 Capture<List<File>> firmwareCapture = new Capture<>();
                 mwBoard.downloadFirmwareUpdateFilesAsyncV2()
-                        .onSuccessTask(task -> {
-                            firmwareCapture.set(task.getResult());
+                        .onSuccessTask(getApplicationContext().getMainExecutor(), result -> {
+                            firmwareCapture.set(result);
                             return mwBoard.inMetaBootMode() ? mwBoard.disconnectAsync() : mwBoard.getModule(Debug.class).jumpToBootloaderAsync();
                         })
-                        .continueWith(task -> {
-                            if (task.isFaulted()) {
-                                Snackbar.make(NavigationActivity.this.findViewById(R.id.drawer_layout), task.getError().getLocalizedMessage(), Snackbar.LENGTH_LONG).show();
+                        .addOnSuccessListener(getApplicationContext().getMainExecutor(), result -> {
+                            if (addMimeType(firmwareCapture.get())) {
+                                starter.start(this, DfuService.class);
                             } else {
-                                if (addMimeType(firmwareCapture.get())) {
-                                    starter.start(this, DfuService.class);
-                                } else {
-                                    ((DialogFragment) getSupportFragmentManager().findFragmentByTag(DFU_PROGRESS_FRAGMENT_TAG)).dismiss();
-                                    Snackbar.make(NavigationActivity.this.findViewById(R.id.drawer_layout), R.string.error_firmware_path_type, Snackbar.LENGTH_LONG).show();
-                                }
+                                ((DialogFragment) getSupportFragmentManager().findFragmentByTag(DFU_PROGRESS_FRAGMENT_TAG)).dismiss();
+                                Snackbar.make(NavigationActivity.this.findViewById(R.id.drawer_layout), R.string.error_firmware_path_type, Snackbar.LENGTH_LONG).show();
                             }
-                            return null;
-                        }, Task.UI_THREAD_EXECUTOR);
+                        })
+                        .addOnFailureListener(getApplicationContext().getMainExecutor(), exception -> {
+                                Snackbar.make(NavigationActivity.this.findViewById(R.id.drawer_layout), exception.getLocalizedMessage(), Snackbar.LENGTH_LONG).show();
+                        });
             } else {
                 DfuProgressFragment.newInstance(R.string.message_manual_dfu).show(getSupportFragmentManager(), DFU_PROGRESS_FRAGMENT_TAG);
                 (mwBoard.inMetaBootMode() ? mwBoard.disconnectAsync() : mwBoard.getModule(Debug.class).jumpToBootloaderAsync())
-                        .continueWith(ignored -> starter.start(this, DfuService.class));
+                        .continueWith(getApplicationContext().getMainExecutor(), ignored -> starter.start(this, DfuService.class));
             }
         });
     }
@@ -493,7 +493,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
             case R.id.action_reset:
                 if (!mwBoard.inMetaBootMode()) {
                     mwBoard.getModule(Debug.class).resetAsync()
-                            .continueWith(ignored -> {
+                            .continueWith(Executors.IMMEDIATE_EXECUTOR, ignored -> {
                                 attemptReconnect(0);
                                 return null;
                             });

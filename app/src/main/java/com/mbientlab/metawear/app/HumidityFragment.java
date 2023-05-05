@@ -34,6 +34,7 @@ package com.mbientlab.metawear.app;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 
+import com.mbientlab.metawear.Executors;
 import com.mbientlab.metawear.ForcedDataProducer;
 import com.mbientlab.metawear.UnsupportedModuleException;
 import com.mbientlab.metawear.app.help.HelpOptionAdapter;
@@ -73,10 +74,10 @@ public class HumidityFragment extends SingleDataSensorFragment {
             chartData.addEntry(new Entry(sampleCount, data.value(Float.class)), 0);
 
             sampleCount++;
-        })).continueWithTask(task -> {
+        })).continueWithTask(Executors.IMMEDIATE_EXECUTOR, task -> {
             streamRoute = task.getResult();
             return timerModule.scheduleAsync(HUMIDITY_SAMPLE_PERIOD, false, humiditValue::read);
-        }).continueWith(task -> {
+        }).continueWith(Executors.IMMEDIATE_EXECUTOR, task -> {
             scheduledTask = task.getResult();
             scheduledTask.start();
 

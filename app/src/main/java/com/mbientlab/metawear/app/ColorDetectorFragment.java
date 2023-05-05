@@ -46,6 +46,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
+import com.mbientlab.metawear.Executors;
 import com.mbientlab.metawear.ForcedDataProducer;
 import com.mbientlab.metawear.UnsupportedModuleException;
 import com.mbientlab.metawear.app.help.HelpOption;
@@ -147,11 +148,11 @@ public class ColorDetectorFragment extends SensorFragment {
             sampleCount++;
 
             updateChart();
-        })).continueWithTask(task -> {
+        })).continueWithTask(Executors.IMMEDIATE_EXECUTOR, task -> {
             streamRoute = task.getResult();
 
             return timerModule.scheduleAsync(COLOR_SAMPLE_PERIOD, false, colorAdc::read);
-        }).continueWith(task -> {
+        }).continueWith(Executors.IMMEDIATE_EXECUTOR, task -> {
             scheduledTask = task.getResult();
             scheduledTask.start();
             return null;
